@@ -1494,7 +1494,7 @@ function handleDeleteProduct(productId: string, productName?: string) {
                               <div>
                                 <p className="font-medium text-[#1F2937]">Categorías</p>
                                 <p className="text-sm text-[#6B7280]">
-                                  Puedes buscarlas o crear una nueva en caliente.
+                                  Puedes buscarlas o crear una nueva.
                                 </p>
                               </div>
 
