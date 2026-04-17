@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { Suspense, useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, Loader2, PackageSearch, Search } from "lucide-react"
@@ -96,7 +96,7 @@ function statusClasses(status: string) {
   return "bg-slate-100 text-slate-700"
 }
 
-export default function SpecialRequestsPage() {
+function SpecialRequestsPageContent() {
   const [suppliers, setSuppliers] = useState<SupplierItem[]>([])
   const [items, setItems] = useState<SubmissionItem[]>([])
   const [loading, setLoading] = useState(true)
@@ -372,5 +372,21 @@ await apiForm("/submissions", formData, "POST")
         </div>
       </div>
     </div>
+  )
+}
+export default function SpecialRequestsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FCFAF4] flex items-center justify-center">
+          <div className="inline-flex items-center gap-2 text-[#6B7280]">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            Cargando...
+          </div>
+        </div>
+      }
+    >
+      <SpecialRequestsPageContent />
+    </Suspense>
   )
 }
