@@ -416,9 +416,13 @@ export default function SupplierDetailPage({
                     ) : null}
                   </div>
 
-                  <button className="w-full mt-4 py-2.5 bg-[#F3E7C9] text-[#1F2937] rounded-xl font-medium hover:bg-[#F3E7C9]/70 transition-all">
-                    Solicitar información
-                  </button>
+<Link
+  href="/chat"
+  className="w-full mt-4 inline-flex items-center justify-center gap-2 py-2.5 bg-[#F3E7C9] text-[#1F2937] rounded-xl font-medium hover:bg-[#F3E7C9]/70 transition-all"
+>
+  <MessageCircle className="w-4 h-4" />
+  Solicitar información
+</Link>
                 </div>
               </div>
             ))}
