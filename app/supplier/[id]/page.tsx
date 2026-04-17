@@ -200,13 +200,23 @@ export default function SupplierDetailPage({
               <span className="text-xl font-bold text-[#0E5A6B]">LinkCom.mx</span>
             </div>
 
-            <Link
-              href="/chat"
-              className="flex items-center gap-2 px-4 py-2 bg-[#0E5A6B] text-white rounded-xl font-medium hover:bg-[#0E5A6B]/90 transition-all"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span className="hidden sm:inline">Contactar</span>
-            </Link>
+<div className="flex gap-3">
+  <Link
+    href="/chat"
+    className="flex items-center gap-2 px-4 py-2 bg-[#0E5A6B] text-white rounded-xl font-medium hover:bg-[#0E5A6B]/90 transition-all"
+  >
+    <MessageCircle className="w-4 h-4" />
+    <span className="hidden sm:inline">Contactar</span>
+  </Link>
+
+  <Link
+    href={`/forms?supplier_id=${supplier.id}`}
+    className="flex items-center gap-2 px-4 py-2 border border-[#E5E7EB] bg-white text-[#1F2937] rounded-xl font-medium hover:bg-[#F3E7C9]/30 transition-all"
+  >
+    <Package className="w-4 h-4" />
+    <span className="hidden sm:inline">Solicitud especial</span>
+  </Link>
+</div>
           </div>
         </div>
       </header>
@@ -269,15 +279,23 @@ export default function SupplierDetailPage({
                   ) : null}
                 </div>
 
-                <div className="flex gap-3">
-                  <Link
-                    href="/chat"
-                    className="flex items-center gap-2 px-5 py-2.5 bg-[#0E5A6B] text-white rounded-xl font-medium hover:bg-[#0E5A6B]/90 transition-all"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    Iniciar chat
-                  </Link>
-                </div>
+<div className="flex gap-3 flex-wrap">
+  <Link
+    href="/chat"
+    className="flex items-center gap-2 px-5 py-2.5 bg-[#0E5A6B] text-white rounded-xl font-medium hover:bg-[#0E5A6B]/90 transition-all"
+  >
+    <MessageCircle className="w-4 h-4" />
+    Iniciar chat
+  </Link>
+
+  <Link
+    href={`/forms?supplier_id=${supplier.id}`}
+    className="flex items-center gap-2 px-5 py-2.5 border border-[#E5E7EB] bg-white text-[#1F2937] rounded-xl font-medium hover:bg-[#F3E7C9]/30 transition-all"
+  >
+    <Package className="w-4 h-4" />
+    Solicitud especial
+  </Link>
+</div>
               </div>
 
               {tags.length > 0 ? (
@@ -330,18 +348,6 @@ export default function SupplierDetailPage({
                     <Mail className="w-5 h-5 text-[#0E5A6B]" />
                     <span className="text-[#1F2937]">{supplier.email}</span>
                   </div>
-                ) : null}
-
-                {supplier.website ? (
-                  <a
-                    href={supplier.website}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-3 px-4 py-3 bg-[#FCFAF4] rounded-xl hover:bg-[#F3E7C9]/35 transition-colors"
-                  >
-                    <Globe className="w-5 h-5 text-[#0E5A6B]" />
-                    <span className="text-[#1F2937]">Sitio web</span>
-                  </a>
                 ) : null}
 
                 {supplier.address ? (

@@ -15,7 +15,6 @@ import {
   X,
   Plus,
   Search,
-  Bell,
   Star,
   Upload,
   Loader2,
@@ -26,6 +25,9 @@ import {
 import { useRouter } from "next/navigation"
 import { useApp } from "@/lib/context"
 import VideosWorkshopsContent from "./videos-workshops-content"
+import AdminUsersContent from "./admin-users-content"
+import AdminChatContent from "./admin-chat-content"
+import AdminSpecialRequestsContent from "./admin-special-requests-content"
 
 type AdminSection =
   | "dashboard"
@@ -283,7 +285,7 @@ export default function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const router = useRouter()
   const { setRole } = useApp()
-
+const [chatJump, setChatJump] = useState<{ conversationId: string; token: number } | null>(null)
   const handleLogout = () => {
     localStorage.removeItem("linkcom_token")
     localStorage.removeItem("linkcom_user")
@@ -385,10 +387,6 @@ const navItems: { id: AdminSection; label: string; icon: React.ElementType }[] =
                 {navItems.find((n) => n.id === activeSection)?.label}
               </h1>
             </div>
-            <button className="p-2.5 rounded-xl hover:bg-[#F3E7C9]/50 transition-colors relative">
-              <Bell className="w-5 h-5 text-[#1F2937]" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
-            </button>
           </div>
         </header>
 
@@ -397,27 +395,20 @@ const navItems: { id: AdminSection; label: string; icon: React.ElementType }[] =
           {activeSection === "suppliers" && <SuppliersContent />}
           {activeSection === "categories" && <CategoriesContent />}
 {activeSection === "videos" && <VideosWorkshopsContent />}
-          {activeSection === "submissions" && (
-            <PlaceholderSection
-              title="Solicitudes"
-              description="Esta sección la dejamos para la siguiente vuelta."
-              icon={FileText}
-            />
-          )}
-          {activeSection === "users" && (
-            <PlaceholderSection
-              title="Usuarios"
-              description="Esta sección la dejamos para la siguiente vuelta."
-              icon={Users}
-            />
-          )}
-          {activeSection === "chat" && (
-            <PlaceholderSection
-              title="Chat"
-              description="Esta sección la dejamos para la siguiente vuelta."
-              icon={MessageCircle}
-            />
-          )}
+{activeSection === "submissions" && <AdminSpecialRequestsContent />}
+{activeSection === "users" && (
+  <AdminUsersContent
+    onOpenConversation={(conversationId) => {
+      setChatJump({
+        conversationId,
+        token: Date.now(),
+      })
+      setActiveSection("chat")
+    }}
+  />
+)}
+
+{activeSection === "chat" && <AdminChatContent chatJump={chatJump} />}
         </main>
       </div>
     </div>
@@ -449,7 +440,7 @@ function DashboardContent() {
     { label: "Proveedores", value: stats?.suppliers ?? 0, change: "Registrados" },
     { label: "Categorías", value: stats?.categories ?? 0, change: "Disponibles" },
     { label: "Productos", value: stats?.products ?? 0, change: "Activos" },
-    { label: "Solicitudes", value: stats?.submissions_pending ?? 0, change: "Pendientes" },
+    { label: "Solicitudes", value: stats?.submissions_pending ?? 0, change: "Totales" },
   ]
 
   return (
@@ -476,10 +467,6 @@ function DashboardContent() {
           <div className="rounded-2xl bg-[#FCFAF4] border border-[#E5E7EB] p-4">
             <p className="text-[#6B7280]">Usuarios</p>
             <p className="text-2xl font-semibold text-[#1F2937] mt-2">{loading ? "..." : stats?.users ?? 0}</p>
-          </div>
-          <div className="rounded-2xl bg-[#FCFAF4] border border-[#E5E7EB] p-4">
-            <p className="text-[#6B7280]">Promociones</p>
-            <p className="text-2xl font-semibold text-[#1F2937] mt-2">{loading ? "..." : stats?.promotions ?? 0}</p>
           </div>
           <div className="rounded-2xl bg-[#FCFAF4] border border-[#E5E7EB] p-4">
             <p className="text-[#6B7280]">Videos</p>

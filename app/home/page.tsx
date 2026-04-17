@@ -1,10 +1,9 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import {
-  Bell,
   BookOpen,
   FileText,
   LogOut,
@@ -310,7 +309,21 @@ export default function UserHomePage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [userProfile, setUserProfile] = useState<UserMenuProfile>({ name: "Usuario", company: "LinkCom" })
+const suppliersSectionRef = useRef<HTMLElement | null>(null)
 
+function scrollToSuppliers() {
+  suppliersSectionRef.current?.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  })
+}
+
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  })
+}
   const handleLogout = () => {
     localStorage.removeItem("linkcom_token")
     localStorage.removeItem("linkcom_user")
@@ -397,9 +410,14 @@ export default function UserHomePage() {
       <header className="sticky top-0 z-40 bg-white border-b border-[#E5E7EB] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/home" className="flex items-center gap-2">
-              <span className="text-xl font-bold text-[#0E5A6B]">LinkCom.mx</span>
-            </Link>
+<button
+  type="button"
+  onClick={scrollToTop}
+  aria-label="Ir al inicio"
+  className="flex items-center gap-2 cursor-pointer select-none rounded-xl px-2 py-1 hover:bg-[#F3E7C9]/40 transition-colors"
+>
+  <span className="text-xl font-bold text-[#0E5A6B]">LinkCom.mx</span>
+</button>
 
             <div className="hidden md:flex flex-1 max-w-xl mx-8">
               <div className="relative w-full">
@@ -414,21 +432,20 @@ export default function UserHomePage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <Link href="/chat" className="p-2.5 rounded-xl hover:bg-[#F3E7C9]/50 transition-colors relative">
-                <MessageCircle className="w-5 h-5 text-[#1F2937]" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#0E5A6B] rounded-full" />
-              </Link>
-              <button className="p-2.5 rounded-xl hover:bg-[#F3E7C9]/50 transition-colors relative">
-                <Bell className="w-5 h-5 text-[#1F2937]" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
-              </button>
-              <button className="hidden md:flex items-center gap-2 p-1.5 pr-3 rounded-xl hover:bg-[#F3E7C9]/50 transition-colors">
+<div className="flex items-center gap-2">
+  <Link href="/chat" className="p-2.5 rounded-xl hover:bg-[#F3E7C9]/50 transition-colors relative">
+    <MessageCircle className="w-5 h-5 text-[#1F2937]" />
+    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#0E5A6B] rounded-full" />
+  </Link>
+<Link
+  href="/perfil"
+  className="hidden md:flex items-center gap-2 p-1.5 pr-3 rounded-xl hover:bg-[#F3E7C9]/50 transition-colors"
+>
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0E5A6B] text-sm font-semibold text-white">
                   {userProfile.name.slice(0, 1).toUpperCase()}
                 </div>
                 <span className="text-sm font-medium text-[#1F2937]">{userProfile.name.split(" ")[0]}</span>
-              </button>
+</Link>
               <button
                 onClick={() => setSideMenuOpen(true)}
                 className="p-2.5 rounded-xl hover:bg-[#F3E7C9]/50 transition-colors"
@@ -475,8 +492,17 @@ export default function UserHomePage() {
             </div>
 
             <div className="p-4 space-y-1">
-              <MenuItem icon={User} label="Mi cuenta" onClick={() => setSideMenuOpen(false)} />
-              <MenuItem icon={FileText} label="Solicitudes de catálogo" href="/forms" onClick={() => setSideMenuOpen(false)} />
+<MenuItem
+  icon={User}
+  label="Mi cuenta"
+  href="/perfil"
+  onClick={() => setSideMenuOpen(false)}
+/>              <MenuItem
+  icon={FileText}
+  label="Solicitudes especiales"
+  href="/forms"
+  onClick={() => setSideMenuOpen(false)}
+/>
               <MenuItem icon={MessageCircle} label="Chat" href="/chat" onClick={() => setSideMenuOpen(false)} />
               <MenuItem icon={BookOpen} label="Asesoramiento y talleres" href="/learning" onClick={() => setSideMenuOpen(false)} />
 
@@ -521,9 +547,13 @@ export default function UserHomePage() {
                       <p className="text-lg md:text-xl text-white/90 mb-6">
                         {banner.subtitle}
                       </p>
-                      <button className="px-6 py-3 bg-[#0E5A6B] text-white rounded-xl font-medium hover:bg-[#0E5A6B]/90 transition-all shadow-lg">
-                        {banner.cta}
-                      </button>
+<button
+  type="button"
+  onClick={scrollToSuppliers}
+  className="inline-flex px-6 py-3 bg-[#0E5A6B] text-white rounded-xl font-medium hover:bg-[#0E5A6B]/90 transition-all shadow-lg"
+>
+  {banner.cta}
+</button>
                     </div>
                   </div>
                 </div>
@@ -583,8 +613,8 @@ export default function UserHomePage() {
           </div>
         </section>
 
-        <section className="pb-14 pt-2">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section ref={suppliersSectionRef} className="pb-14 pt-2">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-6 flex flex-col gap-4">
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold text-[#1F2937]">{activeCategoryName}</h2>
@@ -678,7 +708,16 @@ export default function UserHomePage() {
             <div>
               <h4 className="font-semibold mb-4">Plataforma</h4>
               <ul className="space-y-2 text-sm text-white/70">
-                <li><Link href="/home" className="hover:text-white transition-colors">Inicio</Link></li>
+<li>
+  <button
+    type="button"
+    onClick={scrollToTop}
+    aria-label="Subir al inicio"
+    className="inline-flex cursor-pointer hover:text-white transition-colors"
+  >
+    Inicio
+  </button>
+</li>
                 <li><Link href="/learning" className="hover:text-white transition-colors">Talleres</Link></li>
                 <li><Link href="/chat" className="hover:text-white transition-colors">Chat</Link></li>
               </ul>
